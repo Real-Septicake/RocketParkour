@@ -108,7 +108,7 @@ public class RocketLauncher : MonoBehaviour
             // Create the bullet
             GameObject bullet = Instantiate(projectile);
             bullet.transform.position = transform.position;
-            bullet.GetComponent<Rigidbody2D>().velocity = -transform.localPosition.normalized * projVelocity;
+            bullet.GetComponent<Rigidbody2D>().velocity = transform.localPosition.normalized * projVelocity;
             bullet.GetComponent<Bullet>().damage = damage;
             timer = cooldown;
 
@@ -119,6 +119,6 @@ public class RocketLauncher : MonoBehaviour
 
         // Reset position
         // TEMPORARY - replace with an Ienumerator that pulls it back with force
-        transform.localPosition = Vector2.zero;
+        //transform.localPosition = Vector2.zero;
     }
 }

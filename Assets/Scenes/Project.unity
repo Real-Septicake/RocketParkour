@@ -600,7 +600,7 @@ MonoBehaviour:
   mousePos: {x: 0, y: 0}
   player: {fileID: 204366612}
   projectile: {fileID: 4883095819698433185, guid: d31a29521387c444d8b8f27f75998c3c, type: 3}
-  projVelocity: 1
+  projVelocity: 10
   cooldown: 0
   timer: 0
   damage: 0
