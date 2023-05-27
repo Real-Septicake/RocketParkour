@@ -22,8 +22,7 @@ public class RocketLauncher : MonoBehaviour
 
     private bool clicking;
     [SerializeField]
-    private Vector2 mousePin;
-
+    
     private void Start()
     {
         //animator = GameObject.Find("Player Animation").GetComponent<Animator>();
@@ -51,7 +50,6 @@ public class RocketLauncher : MonoBehaviour
             MouseUp();
             //animator.SetBool("Slingshot Drawn", false);
             //animator.SetBool("Slingshot Attack", true);
-            mousePin = Vector2.zero;
         }
 
         // MouseDrag
@@ -62,7 +60,6 @@ public class RocketLauncher : MonoBehaviour
 
     private void MouseDown()
     {
-        mousePin = Camera.main.ScreenToViewportPoint(Input.mousePosition);
         // Cursor.visible = false;
         clicking = true;
         if (timer <= 0f)
