@@ -15,9 +15,6 @@ public class RocketLauncher : MonoBehaviour
     public float timer;
     public float damage;
 
-    public Vector3 mouseScreenPos;
-    public Vector3 startingScreenPos;
-
     //public AudioSource windUp;
     //public AudioSource shoot;
 
@@ -28,14 +25,21 @@ public class RocketLauncher : MonoBehaviour
     
     private void Start()
     {
-        startingScreenPos = Camera.main.WorldToScreenPoint(transform.position);
-        mouseScreenPos = Input.mousePosition;
         //animator = GameObject.Find("Player Animation").GetComponent<Animator>();
+    }
+    private void Update()
+    {
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.x = mousePos.x - transform.position.x;
+        mousePos.y = mousePos.y - transform.position.y;
+
+        var angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+        //transform.position += Camera.main.ScreenToViewportPoint(Input.mousePosition);
     }
 
     private void FixedUpdate()
     {
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         transform.position = player.transform.position;
         if (Input.GetAxis("Fire1") == 1)
         {
@@ -57,13 +61,6 @@ public class RocketLauncher : MonoBehaviour
             //animator.SetBool("Slingshot Attack", true);
         }
 
-        startingScreenPos = Camera.main.WorldToScreenPoint(transform.position);
-        mouseScreenPos = Input.mousePosition;
-        mouseScreenPos.x -= startingScreenPos.x;
-        mouseScreenPos.y -= startingScreenPos.y;
-        var angle = Mathf.Atan2(mouseScreenPos.y, mouseScreenPos.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-        transform.position += Camera.main.ScreenToViewportPoint(Input.mousePosition);
 
         timer = Mathf.Max(0f, timer - Time.fixedDeltaTime);
     }
@@ -97,7 +94,7 @@ public class RocketLauncher : MonoBehaviour
             // Create the bullet
             GameObject bullet = Instantiate(projectile);
             bullet.transform.position = transform.position;
-            bullet.GetComponent<Rigidbody2D>().velocity = mousePos * projVelocity;
+            bullet.GetComponent<Rigidbody2D>().velocity = mousePos.normalized * projVelocity;
             bullet.GetComponent<Bullet>().damage = damage;
             timer = cooldown;
 
