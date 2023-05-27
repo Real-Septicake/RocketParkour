@@ -600,11 +600,12 @@ MonoBehaviour:
   mousePos: {x: 0, y: 0}
   player: {fileID: 204366612}
   projectile: {fileID: 4883095819698433185, guid: d31a29521387c444d8b8f27f75998c3c, type: 3}
-  projVelocity: 10
+  projVelocity: 2
   cooldown: 0
   timer: 0
   damage: 0
-  mousePin: {x: 0, y: 0}
+  mouseScreenPos: {x: 0, y: 0, z: 0}
+  startingScreenPos: {x: 0, y: 0, z: 0}
 --- !u!212 &386821355
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class RocketLauncher : MonoBehaviour
     public float timer;
     public float damage;
 
-    public Vector3 mouseScreenPos = Input.mousePosition;
+    public Vector3 mouseScreenPos;
     public Vector3 startingScreenPos;
 
     //public AudioSource windUp;
@@ -29,6 +29,7 @@ public class RocketLauncher : MonoBehaviour
     private void Start()
     {
         startingScreenPos = Camera.main.WorldToScreenPoint(transform.position);
+        mouseScreenPos = Input.mousePosition;
         //animator = GameObject.Find("Player Animation").GetComponent<Animator>();
     }
 
@@ -56,6 +57,8 @@ public class RocketLauncher : MonoBehaviour
             //animator.SetBool("Slingshot Attack", true);
         }
 
+        startingScreenPos = Camera.main.WorldToScreenPoint(transform.position);
+        mouseScreenPos = Input.mousePosition;
         mouseScreenPos.x -= startingScreenPos.x;
         mouseScreenPos.y -= startingScreenPos.y;
         var angle = Mathf.Atan2(mouseScreenPos.y, mouseScreenPos.x) * Mathf.Rad2Deg;
