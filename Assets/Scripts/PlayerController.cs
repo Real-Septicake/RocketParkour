@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
         isGrounded = true;
     }
 
-    // private void OnTriggerExit2D(Collider2D collision){
-    //     isGrounded = false;
-    // }
+    private void OnTriggerExit2D(Collider2D collision){
+        isGrounded = false;
+    }
 }
