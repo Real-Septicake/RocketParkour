@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [Tooltip("How fast the player moves")]
     private float speed;
-    private readonly float ACCEL = 0.25f;
+    private readonly float X_ACCEL = 0.25f, JUMP_FORCE = 10;
     private readonly float PRESS_DECEL = 0.15f, RELEASE_DECEL = 0.2f;
     private readonly float MAX_VEL = 30;
     private readonly float GRAVITY = 0.075f; 
@@ -40,12 +40,14 @@ public class PlayerController : MonoBehaviour
     {
         //Values are used several times, this just makes code cleaner
         float inputX = Input.GetAxisRaw("Horizontal");
-        bool inputY = Input.GetKey("space");
+        bool inputY = Input.GetKeyDown("space");
 
         //Apply acceleration
-        velocities.x += inputX*ACCEL;
+        velocities.x += inputX*X_ACCEL;
+
+        velocities.y += JUMP_FORCE*((inputY&&isGrounded)?1:0);
         if(inputY) isGrounded = false;
-        velocities.y += ACCEL*((inputY)?1:0);
+      
 
         //Apply deceleration based on if the player is actively accelerating
         velocities.x = Mathf.Sign(velocities.x) * Mathf.Max(Mathf.Abs(velocities.x) - ((inputX == 0)?RELEASE_DECEL:PRESS_DECEL), 0);
