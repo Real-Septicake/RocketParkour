@@ -15,6 +15,9 @@ public class RocketLauncher : MonoBehaviour
     public float timer;
     public float damage;
 
+    public Vector3 mouseScreenPos = Input.mousePosition;
+    public Vector3 startingScreenPos;
+
     //public AudioSource windUp;
     //public AudioSource shoot;
 
@@ -25,6 +28,7 @@ public class RocketLauncher : MonoBehaviour
     
     private void Start()
     {
+        startingScreenPos = Camera.main.WorldToScreenPoint(transform.position);
         //animator = GameObject.Find("Player Animation").GetComponent<Animator>();
     }
 
@@ -52,8 +56,11 @@ public class RocketLauncher : MonoBehaviour
             //animator.SetBool("Slingshot Attack", true);
         }
 
-        // MouseDrag
-        MouseDrag();
+        mouseScreenPos.x -= startingScreenPos.x;
+        mouseScreenPos.y -= startingScreenPos.y;
+        var angle = Mathf.Atan2(mouseScreenPos.y, mouseScreenPos.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        transform.position += Camera.main.ScreenToViewportPoint(Input.mousePosition);
 
         timer = Mathf.Max(0f, timer - Time.fixedDeltaTime);
     }
@@ -67,24 +74,6 @@ public class RocketLauncher : MonoBehaviour
             // Audio
             //windUp.Play();
         }
-    }
-
-    private void MouseDrag()
-    {
-        var mouseScreenPos = Input.mousePosition;
-        var startingScreenPos = Camera.main.WorldToScreenPoint(transform.position);
-        mouseScreenPos.x -= startingScreenPos.x;
-        mouseScreenPos.y -= startingScreenPos.y;
-        var angle = Mathf.Atan2(mouseScreenPos.y, mouseScreenPos.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-        transform.localPosition += Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        //transform.localPosition *= 2f; /* Make the mouse more sensitive to compensate for the Camera's STVP function in the line above */
-        /*if (transform.localPosition.magnitude > 5f)
-        {
-            transform.localPosition = Vector2.ClampMagnitude(transform.localPosition, 5f);
-        }
-        // transform.localPosition *= -1f;*/
-
     }
 
     private void MouseUp()
@@ -105,7 +94,7 @@ public class RocketLauncher : MonoBehaviour
             // Create the bullet
             GameObject bullet = Instantiate(projectile);
             bullet.transform.position = transform.position;
-            bullet.GetComponent<Rigidbody2D>().velocity = transform.localPosition.normalized * projVelocity;
+            bullet.GetComponent<Rigidbody2D>().velocity = mousePos * projVelocity;
             bullet.GetComponent<Bullet>().damage = damage;
             timer = cooldown;
 
