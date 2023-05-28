@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrounded = false;
 
+    private readonly Vector3 START_POS = new Vector3(0,1.5f,0);
+
 
     Rigidbody2D myRB2D;
     Animator myAnim;
@@ -61,6 +63,12 @@ public class PlayerController : MonoBehaviour
         velocities = Vector2.ClampMagnitude(velocities, MAX_VEL);
 
         myRB2D.velocity = velocities;
+
+        if(Input.GetKeyDown(KeyCode.R)){
+            transform.position = START_POS;
+            velocities = Vector2.zero;
+            myRB2D.velocity = Vector2.zero;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -71,7 +79,9 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision){
-        isGrounded = true;
+        if(collision.gameObject.layer == LayerMask.NameToLayer("floor")){
+            isGrounded = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision){
