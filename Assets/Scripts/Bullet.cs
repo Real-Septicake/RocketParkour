@@ -19,4 +19,10 @@ public class Bullet : MonoBehaviour
     {
         
     }
+
+    void OnCollisionEnter2D(Collision2D collision){
+        if(collision.gameObject.layer == LayerMask.NameToLayer("floor")){
+            Destroy(gameObject, 0);
+        }
+    }
 }
