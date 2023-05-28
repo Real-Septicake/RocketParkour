@@ -76,6 +76,10 @@ public class PlayerController : MonoBehaviour
         if(isGrounded){
             velocities.y = 0;
         }
+        if(collision.gameObject.layer == LayerMask.NameToLayer("projectile")){
+            Vector2 v = collision.gameObject.transform.position.normalized;
+            velocities.Set(velocities.x + (-v.x * 2), velocities.y + (-v.y * 2));
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision){

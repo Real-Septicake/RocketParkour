@@ -22,7 +22,10 @@ public class Bullet : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision){
         if(collision.gameObject.layer == LayerMask.NameToLayer("floor")){
-            Destroy(gameObject, 0);
+            CircleCollider2D blast = gameObject.AddComponent<CircleCollider2D>();
+            blast.radius = 10;
+            blast.isTrigger = true;
+            Destroy(gameObject, 0.5f);
         }
     }
 }
