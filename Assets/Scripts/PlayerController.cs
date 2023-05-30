@@ -8,11 +8,12 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How fast the player moves")]
     private float speed;
     private readonly float X_ACCEL = 0.25f, JUMP_FORCE = 10;
-    private readonly float PRESS_DECEL = 0.15f, RELEASE_DECEL = 0.2f;
+    private readonly float PRESS_DECEL = 0.15f, RELEASE_DECEL = 0.2f, LAUNCH_DECEL = 0.05f;
     private readonly float MAX_VEL = 30;
     private readonly float GRAVITY = 0.075f; 
 
     private bool isGrounded = false;
+    private bool isLaunched = false;
 
     private readonly Vector3 START_POS = new Vector3(0,1.5f,0);
 
@@ -40,6 +41,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //velocities = myRB2D.velocity;
         //Values are used several times, this just makes code cleaner
         float inputX = Input.GetAxisRaw("Horizontal");
         bool inputY = Input.GetKeyDown("space");
@@ -50,9 +52,10 @@ public class PlayerController : MonoBehaviour
         velocities.y += JUMP_FORCE*((inputY&&isGrounded)?1:0);
         if(inputY) isGrounded = false;
       
+        float appliedDecel = ((isLaunched)?LAUNCH_DECEL:(inputX == 0)?RELEASE_DECEL:PRESS_DECEL);
 
         //Apply deceleration based on if the player is actively accelerating
-        velocities.x = Mathf.Sign(velocities.x) * Mathf.Max(Mathf.Abs(velocities.x) - ((inputX == 0)?RELEASE_DECEL:PRESS_DECEL), 0);
+        velocities.x = Mathf.Sign(velocities.x) * Mathf.Max(Mathf.Abs(velocities.x) - appliedDecel, 0);
         // velocities.y = Mathf.Sign(velocities.y) * (Mathf.Abs(velocities.y) - ((inputY == 0)?RELEASE_DECEL:PRESS_DECEL));
 
         if(!isGrounded){
@@ -73,6 +76,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log(gameObject.GetComponent<PlayerController>() != null);
         if(isGrounded){
             velocities.y = 0;
         }
@@ -85,10 +89,17 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision){
         if(collision.gameObject.layer == LayerMask.NameToLayer("floor")){
             isGrounded = true;
+            isLaunched = false;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision){
         isGrounded = false;
+    }
+
+    public void ApplyForce(Vector2 force){
+        velocities.x += force.x;
+        velocities.y += force.y;
+        isLaunched = true;
     }
 }
