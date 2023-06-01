@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How fast the player moves")]
     private float speed;
     private readonly float X_ACCEL = 0.25f, JUMP_FORCE = 10;
-    private readonly float PRESS_DECEL = 0.15f, RELEASE_DECEL = 0.2f, LAUNCH_DECEL = 0.05f;
+    private readonly float PRESS_DECEL = 0.15f, RELEASE_DECEL = 0.2f, LAUNCH_DECEL = 0.025f;
     private readonly float MAX_VEL = 30;
     private readonly float GRAVITY = 0.075f; 
 
@@ -76,7 +76,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(gameObject.GetComponent<PlayerController>() != null);
         if(isGrounded){
             velocities.y = 0;
         }
@@ -100,6 +99,6 @@ public class PlayerController : MonoBehaviour
     public void ApplyForce(Vector2 force){
         velocities.x += force.x;
         velocities.y += force.y;
-        isLaunched = true;
+        isLaunched = force.y>0.1f;
     }
 }

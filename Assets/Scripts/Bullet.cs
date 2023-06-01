@@ -22,10 +22,11 @@ public class Bullet : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision){
         if(collision.gameObject.layer == LayerMask.NameToLayer("floor")){
-            RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, 10, Vector2.zero);
+            RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, 3, Vector2.zero);
             foreach (RaycastHit2D r in hits){
                 if(r.rigidbody.gameObject.layer == LayerMask.NameToLayer("player")){
-                    r.rigidbody.gameObject.GetComponent<PlayerController>().ApplyForce(r.normal*-20);
+                    Vector2 f = r.normal;
+                    r.rigidbody.gameObject.GetComponent<PlayerController>().ApplyForce(new Vector2(f.x, f.y).normalized*-10);
                     break;
                 }
             }
